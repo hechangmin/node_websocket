@@ -56,8 +56,15 @@ require('./websocket.js').createServer(function(ws) {
                 msg  : avoidXSS(e.substr(4))
             };
 
-            for(var i in clientList){
-                clientList[i].send(JSON.stringify(data));
+            //broadcast
+            for(var i = 0, nCount = clientList.length; i < nCount; i++){
+                try{
+                    clientList[i].send(JSON.stringify(data));
+                }catch(e){
+                    clientList.splice(i, 1);
+                    nCount = clientList.length;
+                    i--;
+                }
             }
         }
 
@@ -72,6 +79,7 @@ require('./websocket.js').createServer(function(ws) {
     });
 
     ws.on("close", function() {
+        clientList.splice(clientList.indexOf(ws), 1);
         console.log("客户端断开");
     });
 
