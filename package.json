@@ -1,0 +1,21 @@
+{
+  "name": "node websoket",
+  "version": "1.0.0",
+  "description": "nodejs websoket, html5",
+  "homepage": "http://github.com/hechangmin/node-websoket",
+  "main": "./websoket.js",
+  "keywords": [
+    "websoket",
+    "nodejs",
+    "html5"
+  ],
+  "author": {
+    "name": "hechangmin"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hechangmin/node-websoket.git"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
