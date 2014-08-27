@@ -9,13 +9,15 @@
 var net 	   = require('net'),
 	crypto     = require('crypto'),
 	WSKEY      = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11',
-	
+
+	/*jshint multistr: true */
 	CROSSXML   = '\
 <?xml version="1.0"?>\r\n\
 <cross-domain-policy>\r\n\
 <allow-access-from domain="{domain}" to-ports="{port}" />\r\n\
 </cross-domain-policy>\0',
 
+	/*jshint multistr: true */
     SHAKEHANDS = '\
 HTTP/1.1 101 Switching Protocols\r\n\
 Upgrade: websocket\r\n\
@@ -33,11 +35,11 @@ function WebSocketServer(callback) {
 	}.bind(this));
 
 	this.listen = function(port, domain) {
-		this.port   = port,
+		this.port   = port;
 		this.domain = domain || '*';
 		this.server.listen(port);
 	};
-};
+}
 
 function WebSocketSession(connection, port, domain) {
 	var stream   = new Buffer(0),
@@ -77,10 +79,14 @@ function WebSocketSession(connection, port, domain) {
 	 *  -+--------+-------------------------------------+-----------|
 	 */
 	connection.on('data', function(e) {
+		
+		var frame,
+			evt,
+			param;
 
 		stream = Buffer.concat([stream, e]);
 
-		if(state == 0){
+		if(state === 0){
 
 			var string = stream.toString();
 
@@ -90,69 +96,67 @@ function WebSocketSession(connection, port, domain) {
 					connection.write(sub(CROSSXML, {domain : domain, port : port}));
 					return '';
 				}).replace(/^[\s\S]*?\r\n\r\n/,
-				function(e) {
-					var key, origin;
-					stream = stream.slice(e.length);
-					key = e.match(/Sec-WebSocket-Key: (.+)|$/)[1];
-					key = crypto.createHash('sha1').update(key + WSKEY).digest('base64');
-					origin = e.match(/Origin: https?:\/\/(.+)|$/)[1];
-					console.log(domain,origin);
-					if (!origin || domain == '*' || origin == domain) {
-						connection.write(sub(SHAKEHANDS,{key : key}));
-						state = 1;
-						triger('open', null);
-					};
-					return '';
-				});
-		} else if (state == 1) {
+					function(e) {
+						var key, origin;
+						stream = stream.slice(e.length);
+						key = e.match(/Sec-WebSocket-Key: (.+)|$/)[1];
+						key = crypto.createHash('sha1').update(key + WSKEY).digest('base64');
+						origin = e.match(/Origin: https?:\/\/(.+)|$/)[1];
+						
+						//console.log(domain,origin);
 
-			var frame,
-				event,
-				param;
-			while (frame = readFrame()) {
+						if (!origin || domain == '*' || origin == domain) {
+							connection.write(sub(SHAKEHANDS,{key : key}));
+							state = 1;
+							triger('open', null);
+						}
+						return '';
+					});
+		} else if (state == 1) {
+			while (frame = readFrame(), frame) {
 				switch (frame.opcode) {
 					case 1:
-						event = 'message',
+						evt = 'message';
 						param = frame.data + '';
 						break;
 					case 2:
-						event = 'message',
+						evt = 'message';
 						param = frame.data;
 						break;
 					case 8:
-						event = 'close',
-						param = frame.data,
+						evt = 'close';
+						param = frame.data;
 						state = 2;
 						break;
 					case 10:
-						event = 'pong',
+						evt = 'pong';
 						param = frame.data;
 						break;
 					default:
-						event = 'error',
+						evt = 'error';
 						param = {
-							frame: frame,
-							message: '未知操作码'
+							frame : frame,
+							message : '未知操作码'
 						};
 						break;
-				};
+				}
 
-				triger(event, param);
-			};
-		};
+				triger(evt, param);
+			}
+		}
 	});
 	
 	function triger(evtName, param){
 		for (var i = 0, s = events[evtName]; i < s.length; i++) {
 			s[i](param);
 		}
-	};
+	}
 
 	connection.on('close', function(e) {
 		if (state < 2) {
 			triger('close', null);
 			state = 2;
-		};
+		}
 	});
 
 	connection.on('error', function(e) {
@@ -251,7 +255,7 @@ function WebSocketSession(connection, port, domain) {
 			opcode: opcode,
 			data: data
 		};
-	};
+	}
 
 	// 根据rfc6455 第5.1节规定：A server MUST NOT mask any frames that it sends to the client
 	function writeFrame(opcode, data) {
@@ -278,16 +282,16 @@ function WebSocketSession(connection, port, domain) {
 		}
 
 		connection.write(Buffer.concat([first, second, third]));
-	};
-};
+	}
+}
 
 WebSocketSession.prototype = {
-	on : function(event, callback) {
-		return this.events[event].push(callback),this;
+	on : function(evt, callback) {
+		return this.events[evt].push(callback),this;
 	},
 
-	off : function(event, callback) {
-		var o = this.events[event];
+	off : function(evt, callback) {
+		var o = this.events[evt];
 
 		for (var i = 0, len = o.length; i < len; i++){
 			if (o[i] == callback){

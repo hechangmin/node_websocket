@@ -60,7 +60,7 @@ require('./websocket.js').createServer(function(ws) {
             for(var i = 0, nCount = clientList.length; i < nCount; i++){
                 try{
                     clientList[i].send(JSON.stringify(data));
-                }catch(e){
+                }catch(err){
                     clientList.splice(i, 1);
                     nCount = clientList.length;
                     i--;
