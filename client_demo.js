@@ -8,7 +8,6 @@ client.on('data', function(data) {
 	var x = JSON.parse(o.data.toString());
 	console.log(x);
 	if( '1+1=?' === x.msg){
-		console.log('11111111111')
 		client.write(1, 'text2');
 	}
 });
