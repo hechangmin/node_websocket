@@ -5,7 +5,7 @@ This is the realization of a nodejs web socket framework, with a very simple exa
 ##usage##
 
 1. cd . 
-2. node server.js
+2. node server_demo.js
 
 >Please read index.html or server.js.
 

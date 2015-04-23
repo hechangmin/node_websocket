@@ -27,7 +27,7 @@ http.createServer(function(req, res){
     res.setHeader("Content-Type", contentType);
 
     try{
-        var stream = fs.createReadStream('./index.html');
+        var stream = fs.createReadStream('./demo.html');
         stream.on("error", function(err) {
             res.end('Internal Server Error');
         });
@@ -37,7 +37,7 @@ http.createServer(function(req, res){
     }
 }).listen(80);
 
-require('./websocket.js').createServer(function(ws) {
+require('./lib/websocket').createServer(function(ws) {
     
     clientList.push(ws);
 
