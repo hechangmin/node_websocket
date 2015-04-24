@@ -4,7 +4,7 @@ This is the realization of a nodejs web socket framework, with a very simple exa
 
 ##installation##
 
-npm install node_websocket
+npm install node-websocket
 
 ##usage##
 
