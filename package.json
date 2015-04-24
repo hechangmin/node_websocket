@@ -1,6 +1,6 @@
 {
   "name": "node websoket",
-  "version": "1.0.1",
+  "version": "1.1.1",
   "description": "nodejs websoket, html5",
   "homepage": "http://github.com/hechangmin/node-websoket",
   "main": "./lib/websoket.js",

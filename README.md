@@ -2,6 +2,10 @@
 
 This is the realization of a nodejs web socket framework, with a very simple example.
 
+##installation##
+
+npm install node_websocket
+
 ##usage##
 
 1. cd . 
