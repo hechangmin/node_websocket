@@ -1,8 +1,8 @@
 {
   "name": "node-websoket",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "nodejs websoket, html5",
-  "homepage": "http://github.com/hechangmin/node-websoket",
+  "homepage": "http://github.com/hechangmin/node_websoket",
   "main": "./lib/websoket.js",
   "keywords": [
     "websoket",
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/hechangmin/node-websoket.git"
+    "url": "git://github.com/hechangmin/node_websoket.git"
   },
   "dependencies": {},
   "devDependencies": {}
