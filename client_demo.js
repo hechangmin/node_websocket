@@ -13,5 +13,9 @@ client.on('data', function(data) {
 });
 
 client.on('end', function() {
-	console.log('客户端断开连接');
+	console.log('客户端断开连接。');
+});
+
+client.on('error', function(e) {
+	console.log('服务端断开连接 : ' + e);
 });
