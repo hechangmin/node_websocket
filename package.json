@@ -1,6 +1,6 @@
 {
   "name": "node-websoket",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "nodejs websoket, html5",
   "homepage": "http://github.com/hechangmin/node_websocket",
   "main": "./lib/websoket.js",
